@@ -32,7 +32,49 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+input {
+  width: 40%;
+  display: flex;
+  margin: 0 auto;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.loginbtn {
+  width: 40%;
+  display: flex;
+  margin: 0 auto;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.background-image {
+  background-image: url('bg.jpg');
+  background-size: cover;
+  /* Resize the image to fit the element */
+  background-position: center;
+  /* Center the image within the element */
+  background-repeat: no-repeat;
+  /* Do not repeat the image */
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  /* filter: brightness(20%); */
 }
