@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import userSignUp from '../auth/userSignUp';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = (props) => {
   const [email, setEmail] = useState('');
