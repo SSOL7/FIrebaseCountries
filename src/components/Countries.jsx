@@ -14,7 +14,6 @@ import {
   collection,
   deleteDoc,
   getDocs,
-  getFirestore,
   query,
   where,
 } from 'firebase/firestore';
@@ -23,7 +22,6 @@ import { firebaseauth } from '../firebase/config';
 import { db } from '../firebase/config';
 
 const Countries = () => {
-  const [search, setSearch] = useState('');
   const [user] = useAuthState(firebaseauth);
   const [favourites, setFavourites] = useState([]);
 
@@ -49,6 +47,7 @@ const Countries = () => {
   }, [user]);
 
   const { data } = useSelector((state) => state.countriesReducer);
+  const [filteredCountries, setFilteredCountries] = useState(data);
   const navigate = useNavigate();
   const { error, logOut } = userLogOut();
 
@@ -59,16 +58,20 @@ const Countries = () => {
     }
   };
 
-  console.log('Search: ', search);
   console.log('Countries component: ', data);
   console.log('User: ', user);
 
   const addFavouriteToFirebase = async (uid, name) => {
     try {
+      if (favourites.includes(name)) {
+        alert('Country already in favourites');
+        return;
+      }
       await addDoc(collection(db, 'favourites'), {
         uid,
         country: name,
       });
+
       console.log('Favourite added to Firebase database');
     } catch (err) {
       console.error('Error adding favourite to Firebase database: ', err);
@@ -105,6 +108,16 @@ const Countries = () => {
     }
   };
 
+  const filterCountries = (event) => {
+    setFilteredCountries(
+      data.filter((country) =>
+        country.name.common
+          .toLowerCase()
+          .includes(event.target.value.toLowerCase())
+      )
+    );
+  };
+
   return (
     <div className='favorites-container'>
       <div className='top-buttons'>
@@ -119,10 +132,22 @@ const Countries = () => {
           Clear favorites
         </Button>
       </div>
-      <h3>Favourite countries</h3>
+      <h3>
+        {favourites.length > 0
+          ? 'Your wishlist countries'
+          : 'Wishlist is empty. Add countries to your wishlist.'}
+      </h3>
       {favourites.map((favourite) => (
-        <div key={favourite}>
+        <div className='favorite-group' key={favourite}>
           <h3>{favourite}</h3>
+          <Button
+            variant='danger'
+            onClick={() => {
+              removeFavouriteFromFirebase(user.uid, favourite);
+            }}
+          >
+            Remove
+          </Button>
         </div>
       ))}
       <div>
@@ -134,7 +159,7 @@ const Countries = () => {
               className='me-2 '
               placeholder='Search for countries'
               aria-label='Search'
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={filterCountries}
             />
           </Form>
         </Col>
@@ -143,8 +168,8 @@ const Countries = () => {
       <Row xs={2} md={3} lg={4} className=''>
         <Col className=''>
           {data.length > 0 ? (
-            data.map((country) => (
-              <Card key={country.altSpellings[0]} style={{ width: '20rem' }}>
+            filteredCountries.map((country) => (
+              <Card key={country.name.common} style={{ width: '20rem' }}>
                 <Button
                   variant='success'
                   onClick={() =>
@@ -164,18 +189,10 @@ const Countries = () => {
                 >
                   Add to favorites
                 </Button>
-                <Button
-                  variant='danger'
-                  onClick={() => {
-                    removeFavouriteFromFirebase(user.uid, country.name.common);
-                  }}
-                >
-                  Remove from favorites
-                </Button>
                 <Card.Img variant='top' src={country.flags.png} />
                 <Card>
-                  <Card.Title>Name: {country.name.common}</Card.Title>
-                  <Card.Text>Capital: {country.capital}</Card.Text>
+                  <Card.Text>{country.name.common}</Card.Text>
+                  <Card.Title>Capital: {country.capital}</Card.Title>
                 </Card>
               </Card>
             ))

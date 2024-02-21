@@ -10,15 +10,15 @@ const Layout = () => {
   return (
     <Container fluid>
       <Row>
-        <Navbar bg="light" variant="light">
-          <Container className="justify-content-end">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar>
+          <Container className='justify-content-end'>
+            <Navbar.Toggle aria-controls='basic-navbar-nav' />
+            <Navbar.Collapse id='basic-navbar-nav'>
               <Nav>
-                <LinkContainer to="/">
+                <LinkContainer to='/'>
                   <Nav.Link>Home</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/countries">
+                <LinkContainer to='/countries'>
                   <Nav.Link>Countries</Nav.Link>
                 </LinkContainer>
               </Nav>

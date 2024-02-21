@@ -27,7 +27,7 @@ const CountriesSingle = () => {
         <Card key={country.altSpellings[0]} style={{ width: '20rem' }}>
           <Card.Img variant='top' src={country.flags.png} />
           <Card.Body>
-            <Card.Title>Name: {country.name.common}</Card.Title>
+            <Card.Text>{country.name.common}</Card.Text>
             <Card.Text>Capital: {country.capital}</Card.Text>
             <Card.Text>
               Population: {country?.population.toLocaleString()}
